@@ -6,23 +6,22 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace ProPatria_GergoAmbrus_HomeWork;
 
-public class Tests
+public class BreedEndpointTests
 {
 
     private string _breedUrl = "https://catfact.ninja/breeds";
-    private string _factsUrl = "https://catfact.ninja/facts";
     private RestClient _restClient;
     private RestRequest _restRequest;
     Keywords keyword = new Keywords();
 
-    public Tests()
+    public BreedEndpointTests()
     {
         _restClient = new RestClient();
         _restRequest = new RestRequest();
     }
 
     [Test]
-    public void IsGetRequestSuccessful()
+    public void IsAPIAcceccible()
     {
         _restRequest.Resource = _breedUrl;
         var response = _restClient.Get(_restRequest);
@@ -52,7 +51,7 @@ public class Tests
     {
         int breedsFound = 0;
         int currentPage = 1;
-        TestDataModel testData;
+        TestDataBreed testData;
         
         do
         {
