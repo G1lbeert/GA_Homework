@@ -1,18 +1,15 @@
-using System.Text.Json;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Interfaces;
-using Newtonsoft.Json;
+using System.Net;
 using RestSharp;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace ProPatria_GergoAmbrus_HomeWork;
 
 public class BreedEndpointTests
 {
 
-    private string _breedUrl = "https://catfact.ninja/breeds";
-    private RestClient _restClient;
-    private RestRequest _restRequest;
-    Keywords keyword = new Keywords();
+    private readonly string _breedUrl = "https://catfact.ninja/breeds";
+    private readonly RestClient _restClient;
+    private readonly RestRequest _restRequest;
+    readonly Keywords _keyword = new Keywords();
 
     public BreedEndpointTests()
     {
@@ -25,9 +22,7 @@ public class BreedEndpointTests
     {
         _restRequest.Resource = _breedUrl;
         var response = _restClient.Get(_restRequest);
-        _restRequest.AddHeader("Accept", "application/json");
         
-        Console.WriteLine(response.StatusCode);
         Assert.That(response.IsSuccessStatusCode, Is.True);
     }
 
@@ -36,12 +31,11 @@ public class BreedEndpointTests
     {
         _restRequest.Resource = _breedUrl;
         var response = _restClient.Get(_restRequest);
-        _restRequest.AddHeader("Accept", "application/json");
 
-        var testData = keyword.Deserialise(response);
+        var testData = _keyword.BreedDeserialise(response);
         List<string> breedsList = new List<string>();
         
-        keyword.CollectBreeds(testData, breedsList);
+        _keyword.CollectBreeds(testData, breedsList);
         
         Assert.That(testData.to, Is.EqualTo(breedsList.Count));
     }
@@ -58,7 +52,7 @@ public class BreedEndpointTests
             string apiUrl = $"https://catfact.ninja/breeds?page={currentPage}";
             _restRequest.Resource = apiUrl;
             var response = _restClient.Get(_restRequest);
-            testData = keyword.Deserialise(response);
+            testData = _keyword.BreedDeserialise(response);
             breedsFound += testData?.data?.Count ?? 0;
             currentPage++;
 
@@ -72,7 +66,27 @@ public class BreedEndpointTests
     [Test]
     public void FindWantedBreed()
     {
+        string wantedBreed = "Bengal";
+
+        _restRequest.Resource = _breedUrl;
+        var response = _restClient.Get(_restRequest);
+
+        var testData = _keyword.BreedDeserialise(response);
+
+        bool isBreedFound = testData.data.Any(breed => breed.breed == wantedBreed);
         
+        Assert.That(isBreedFound, Is.True);
+    }
+
+    [Test]
+    public void BadEndpointCall()
+    {
+        string badUrl = "https://catfact.ninja/breedz";
+        _restRequest.Resource = badUrl;
+        
+        var response = _restClient.Get(_restRequest);
+        
+        Assert.IsTrue(response.StatusCode == HttpStatusCode.NotFound);
     }
     
 }
