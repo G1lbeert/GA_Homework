@@ -1,24 +1,18 @@
-﻿using System.Net;
+﻿using ProPatria_GergoAmbrus_HomeWork.TestData;
 using RestSharp;
 
-namespace ProPatria_GergoAmbrus_HomeWork;
+namespace ProPatria_GergoAmbrus_HomeWork.Tests;
 
 public class FactEndpointTests
 {
     
     private readonly string _factsUrl = "https://catfact.ninja/facts";
-    private readonly RestClient _restClient;
-    private readonly RestRequest _restRequest;
+    private readonly RestClient _restClient = new();
+    private readonly RestRequest _restRequest = new();
     readonly Keywords _keyword = new Keywords();
-    
-    public FactEndpointTests()
-    {
-        _restClient = new RestClient();
-        _restRequest = new RestRequest();
-    }
-    
+
     [Test]
-    public void IsAPIAcceccible()
+    public void IsApiAccessible()
     {
         _restRequest.Resource = _factsUrl;
         var response = _restClient.Get(_restRequest);

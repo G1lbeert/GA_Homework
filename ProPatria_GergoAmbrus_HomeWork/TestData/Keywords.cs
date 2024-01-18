@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using RestSharp;
 
-namespace ProPatria_GergoAmbrus_HomeWork;
+namespace ProPatria_GergoAmbrus_HomeWork.TestData;
 
 public class Keywords
 {

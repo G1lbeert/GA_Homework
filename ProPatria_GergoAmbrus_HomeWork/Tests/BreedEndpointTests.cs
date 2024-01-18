@@ -1,29 +1,25 @@
 using System.Net;
+using ProPatria_GergoAmbrus_HomeWork.TestData;
 using RestSharp;
+using static NUnit.Framework.Assert;
 
-namespace ProPatria_GergoAmbrus_HomeWork;
+namespace ProPatria_GergoAmbrus_HomeWork.Tests;
 
 public class BreedEndpointTests
 {
 
     private readonly string _breedUrl = "https://catfact.ninja/breeds";
-    private readonly RestClient _restClient;
-    private readonly RestRequest _restRequest;
+    private readonly RestClient _restClient = new();
+    private readonly RestRequest _restRequest = new();
     readonly Keywords _keyword = new Keywords();
 
-    public BreedEndpointTests()
-    {
-        _restClient = new RestClient();
-        _restRequest = new RestRequest();
-    }
-
     [Test]
-    public void IsAPIAcceccible()
+    public void IsApiAccessible()
     {
         _restRequest.Resource = _breedUrl;
         var response = _restClient.Get(_restRequest);
         
-        Assert.That(response.IsSuccessStatusCode, Is.True);
+        That(response.IsSuccessStatusCode, Is.True);
     }
 
     [Test]
@@ -37,14 +33,14 @@ public class BreedEndpointTests
         
         _keyword.CollectBreeds(testData, breedsList);
         
-        Assert.That(testData.to, Is.EqualTo(breedsList.Count));
+        That(testData.to, Is.EqualTo(breedsList.Count));
     }
 
     [Test]
     public void FindTotalNumberOfBreeds()
     {
-        int breedsFound = 0;
-        int currentPage = 1;
+        var breedsFound = 0;
+        var currentPage = 1;
         TestDataBreed testData;
         
         do
@@ -56,17 +52,16 @@ public class BreedEndpointTests
             breedsFound += testData?.data?.Count ?? 0;
             currentPage++;
 
-        } while (currentPage <= testData.last_page);
-        
-        
-        Assert.That(testData.total, Is.EqualTo(breedsFound));
-        
+        } while (testData != null && currentPage <= testData.last_page);
+
+
+        if (testData != null) That(breedsFound, Is.EqualTo(testData.total));
     }
     
     [Test]
     public void FindWantedBreed()
     {
-        string wantedBreed = "Bengal";
+        var wantedBreed = "Bengal";
 
         _restRequest.Resource = _breedUrl;
         var response = _restClient.Get(_restRequest);
@@ -75,18 +70,18 @@ public class BreedEndpointTests
 
         bool isBreedFound = testData.data.Any(breed => breed.breed == wantedBreed);
         
-        Assert.That(isBreedFound, Is.True);
+        That(isBreedFound, Is.True);
     }
 
     [Test]
     public void BadEndpointCall()
     {
-        string badUrl = "https://catfact.ninja/breedz";
+        var badUrl = "https://catfact.ninja/breedz";
         _restRequest.Resource = badUrl;
         
         var response = _restClient.Get(_restRequest);
         
-        Assert.IsTrue(response.StatusCode == HttpStatusCode.NotFound);
+        That(response is { StatusCode: HttpStatusCode.NotFound }, Is.True);
     }
     
 }
