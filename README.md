@@ -13,7 +13,7 @@ Ezen az API-on rengeteg macskákkal kapcsolatos információ található, többe
 
 ### Teszt eredmények:
 
-A teszteket az alapoktól indulva építettem fel. Kezdetben a végpontot vizsgáltam, hogy elérhető-e és sikeres státuszkóddal tér vissza. Utána, a megkapott adatokat hasonlítottam össze az API-ban található adatokkal, például hogy a kapott fajták száma egyezik-e az API-ban számontartott fajták számával.
+A teszteket az alapoktól indulva építettem fel. Kezdetben a végpontot vizsgáltam, hogy elérhető-e és sikeres státuszkóddal tér vissza. Utána, a megkapott adatokat hasonlítottam össze az API-ban található adatokkal, például hogy a kapott fajták száma egyezik-e az API-ban számontartott fajták számával. Sikerült megírnom a tesztet úgy, hogy amennyiben az API-t a jövőben bővítik, a teszt így is ellenőrizni tudja a számontartott fajtákat illetve a kapott, valós adatokat.
 Ellenőriztem azt is, hogy hibás végpont esetén a megfelelő 404-es státuszkódot kapjuk vissza.
 
 Továbbiakban az API egy végpontjának limitálás utáni visszatérési értékeit kívántam vizsgálni. Az API sikeresen hajtja végre az adatok limitálását, még akkor is ha a bevitt érték nem értékelhető. Irracionális illetve negatív számok esetében is tizes értékre állítja a limitet, ennek megfelelően a válasz megérkezik az adatokkal.
@@ -35,7 +35,8 @@ This API contains a wealth of information about cats, including their breed char
 
 ### Test Results:
 
-I built the tests from the ground up. Initially, I examined the endpoints to check its availability and whether it returned a successful status code. Next, I compared the received data with the data available in the API, such as ensuring that the number of received breeds matches the number of breeds recorded in the API. I also verified that, in the case of an incorrect endpoint, the appropriate 404 status code is returned.
+I built the tests from the ground up. Initially, I examined the endpoint to check if it is accessible and returns a successful status code. After that, I compared the received data with the data available in the API, for example, ensuring that the number of received breeds matches the number of breeds recorded in the API. I managed to write the test in a way that, if the API is expanded in the future, the test can still verify the recorded breeds and the received real data.
+I also verified that in the case of an incorrect endpoint, the appropriate 404 status code is returned.
 
 Furthermore, I aimed to examine the return values after limiting one of the API's endpoints. The API successfully limits the data even if the input value is not evaluable. In the case of irrational or negative numbers, it sets the limit to ten, and accordingly, the response is received with the data.
 
